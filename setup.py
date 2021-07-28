@@ -4,7 +4,7 @@ import setuptools
 
 setup(
     name='topic_handler',
-    version='0.0.3',
+    version='0.0.5',
     include_package_data=True,
     description='Library to  management kafka topics with faust',
     author='Andres Gonzalez',
@@ -12,7 +12,7 @@ setup(
     license="GPLv3",
     # use the URL to the github repo
     url='https://github.com/4CodersColombia/event-broker-topic-handler',
-    download_url='https://github.com/4CodersColombia/event-broker-topic-handler/archive/refs/tags/0.0.3.tar.gz',
+    download_url='https://github.com/4CodersColombia/event-broker-topic-handler/archive/refs/tags/0.0.5.tar.gz',
     keywords=['kafka', 'faust'],
     classifiers=['Programming Language :: Python :: 3.9', ],
     packages=setuptools.find_packages(),

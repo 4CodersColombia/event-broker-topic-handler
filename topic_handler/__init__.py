@@ -77,14 +77,14 @@ class HandlerTopics():
             self.response_on_error(ResponseError(
                 res=400, msg="bad request").SerializeToString())
             return
-        self.decode_jwt(self.selected_topic.required_permissions)
+        if self.selected_topic.required_permissions:
+            self.decode_jwt(self.selected_topic.required_permissions)
 
         if self.is_error:
             self.response_on_error(ResponseError(
                 res=400, msg=self.msg).SerializeToString())
             return
-        self.selected_topic.send_response(RequestData(
-            auth_id=self.auth_id, response_topic=self.response_topic))
+        self.selected_topic.send_response()
 
     def create_response_topic(self, message: Messages):
         self.response_topic = (
