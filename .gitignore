@@ -129,3 +129,4 @@ xuach/xuach/config.py
 comad_babel.py
 xuach/config.py
 xuach/models_pb2.py
+test.py
