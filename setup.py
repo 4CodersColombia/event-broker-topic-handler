@@ -12,14 +12,15 @@ setup(
     license="GPLv3",
     # use the URL to the github repo
     url='https://github.com/4CodersColombia/event-broker-topic-handler',
-    download_url='https://github.com/4CodersColombia/firesql/tarball/tarball/0.1',
+    download_url='https://github.com/4CodersColombia/event-broker-topic-handler/archive/refs/tags/0.0.1.tar.gz',
     keywords=['kafka', 'faust'],
     classifiers=['Programming Language :: Python :: 3.9', ],
     packages=setuptools.find_packages(),
     install_requires=[
-        'KafkaProducer == 2.8.0',
+        'kafka-python==1.4.6',
         'betterproto == 1.2.5',
         'PyJWT == 1.7.1',
         'cryptography == "3.4.7"'
     ],
 )
+
