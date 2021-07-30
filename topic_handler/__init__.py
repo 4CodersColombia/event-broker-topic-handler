@@ -67,6 +67,7 @@ class HandlerTopics():
     def response(self, event: Event):
         self.create_response_topic(event.message)
         if self.is_error_handler:
+            self.is_error_handler =False
             return
         try:
             data = RequestFormat().FromString(event.message.value)
@@ -83,9 +84,10 @@ class HandlerTopics():
         if self.is_error_handler:
             self.response_on_error(ResponseError(
                 res=400, msg=self.msg).SerializeToString())
+            self.is_error_handler =False
             return
         self.selected_topic.send_response()
-        self.is_error_handler =False
+        
 
     def create_response_topic(self, message: Messages):
         self.response_topic = (
