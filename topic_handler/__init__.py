@@ -87,6 +87,7 @@ class HandlerTopics():
             self.is_error_handler =False
             return
         self.selected_topic.send_response()
+        self.is_error = False
         
 
     def create_response_topic(self, message: Messages):
