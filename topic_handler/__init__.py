@@ -45,7 +45,7 @@ class RequestData:
 
 
 class HandlerTopics():
-    is_error = False
+    is_error_handler = False
 
     def __init__(self, topic_list: list, HOST_KAFKA, PUBLIC_KEY_JWT):
         self.exist_topics = list(map(lambda x: x(), topic_list))
@@ -60,13 +60,13 @@ class HandlerTopics():
         select: list[Aux] = list(
             filter(lambda x: names_to_snake_case(x) == topic, self.exist_topics))
         if select.__len__() == 0 or select.__len__() > 1:
-            self.is_error = True
+            self.is_error_handler = True
             return
         self.selected_topic = select[0]
 
     def response(self, event: Event):
         self.create_response_topic(event.message)
-        if self.is_error:
+        if self.is_error_handler:
             return
         try:
             data = RequestFormat().FromString(event.message.value)
@@ -80,11 +80,12 @@ class HandlerTopics():
         if self.selected_topic.required_permissions:
             self.decode_jwt(self.selected_topic.required_permissions)
 
-        if self.is_error:
+        if self.is_error_handler:
             self.response_on_error(ResponseError(
                 res=400, msg=self.msg).SerializeToString())
             return
         self.selected_topic.send_response()
+        self.is_error_handler =False
 
     def create_response_topic(self, message: Messages):
         self.response_topic = (
@@ -113,11 +114,11 @@ class HandlerTopics():
             )
             self.auth_id = payload['uid']
         except jwt.ExpiredSignatureError:
-            self.is_error = True
+            self.is_error_handler = True
             self.msg = "EXPIRED_TOKEN"
         except jwt.InvalidAudience:
-            self.is_error = True
+            self.is_error_handler = True
             self.msg = "NOT_AUTHORIZED"
         except Exception as e:
-            self.is_error = True
+            self.is_error_handler = True
             self.msg = str(e)
