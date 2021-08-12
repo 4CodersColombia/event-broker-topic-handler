@@ -6,7 +6,7 @@ from cryptography.hazmat.primitives.serialization.base import (
     load_pem_public_key,
 )
 import jwt
-
+from random import randrange
 
 class Aux:
     required_permissions = []
@@ -46,19 +46,27 @@ class RequestData:
 
 class HandlerTopics():
     is_error_handler = False
-
-    def __init__(self, topic_list: list, HOST_KAFKA, PUBLIC_KEY_JWT):
+    
+    def __init__(self, topic_list: list,table_list:list, HOST_KAFKA, PUBLIC_KEY_JWT):
+        self.exist_tables = list(map(lambda x: x(), table_list))
         self.exist_topics = list(map(lambda x: x(), topic_list))
         self.topics_names = list(map(names_to_snake_case, self.exist_topics))
+        self.tables_names = list(map(names_to_snake_case, self.exist_tables))
         self.HOST_KAFKA = HOST_KAFKA
         self.PUBLIC_KEY_JWT = PUBLIC_KEY_JWT
+        self.is_error = False
 
-    def get_instances(self):
+    def get_instances_topics(self):
         return self.topics_names
+    
+    def get_instances_table(self):
+        return self.tables_names
+
 
     def select_topic(self, topic):
+        total_topics = [self.exist_topics,self.exist_tables]
         select: list[Aux] = list(
-            filter(lambda x: names_to_snake_case(x) == topic, self.exist_topics))
+            filter(lambda x: names_to_snake_case(x) == topic,total_topics))
         if select.__len__() == 0 or select.__len__() > 1:
             self.is_error_handler = True
             return
@@ -125,3 +133,6 @@ class HandlerTopics():
         except Exception as e:
             self.is_error_handler = True
             self.msg = str(e)
+
+    def __hash__(self):       
+        return hash(randrange(1000))
