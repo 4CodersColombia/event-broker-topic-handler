@@ -21,7 +21,6 @@ setup(
         'betterproto==1.2.5',
         'PyJWT==1.7.1',
         'cryptography==3.4.7',
-        'random'
     ],
 )
 
