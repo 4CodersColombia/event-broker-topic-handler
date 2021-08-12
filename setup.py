@@ -4,7 +4,7 @@ import setuptools
 
 setup(
     name='topic_handler',
-    version='0.1.5',
+    version='0.1.8',
     include_package_data=True,
     description='Library to  management kafka topics with faust',
     author='Andres Gonzalez',
