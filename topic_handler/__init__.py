@@ -68,7 +68,7 @@ class HandlerTopics():
         return 0
 
     def select_topic(self, topic):
-        total_topics = [self.exist_topics,self.exist_tables]
+        total_topics = self.exist_topics+self.exist_tables
         self.topic = topic
         select: list[Aux] = list(
             filter(lambda x: names_to_snake_case(x) == topic,total_topics))
