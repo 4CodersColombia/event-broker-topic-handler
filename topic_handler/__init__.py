@@ -85,7 +85,7 @@ class HandlerTopics():
         try:
             validate_table: list[Aux] = list(
             filter(lambda x: names_to_snake_case(x) == self.topic,self.exist_tables))
-            if validate_table.__len__() == 0 or validate_table.__len__() > 1:
+            if validate_table.__len__() == 1:
                 self.selected_topic.set_data(event.message.value)
             else:
                 data = RequestFormat().FromString(event.message.value)
