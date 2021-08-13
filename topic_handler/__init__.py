@@ -6,17 +6,13 @@ from cryptography.hazmat.primitives.serialization.base import (
     load_pem_public_key,
 )
 import jwt
-
+from random import randrange
 
 class Aux:
     required_permissions = []
-
-    def initi_data():
-        pass
-
-    def send_response():
-        pass
-
+    set_data : function
+    initi_data:function
+    send_response: function
 
 def names_to_snake_case(data):
     return re.sub(r'(?<!^)(?=[A-Z])', '_', data.__class__.__name__).lower()
@@ -46,19 +42,30 @@ class RequestData:
 
 class HandlerTopics():
     is_error_handler = False
-
-    def __init__(self, topic_list: list, HOST_KAFKA, PUBLIC_KEY_JWT):
+    
+    def __init__(self, topic_list: list,table_list:list, host_kafka, pulic_key_jwt):
+        self.exist_tables = list(map(lambda x: x(), table_list))
         self.exist_topics = list(map(lambda x: x(), topic_list))
         self.topics_names = list(map(names_to_snake_case, self.exist_topics))
-        self.HOST_KAFKA = HOST_KAFKA
-        self.PUBLIC_KEY_JWT = PUBLIC_KEY_JWT
+        self.tables_names = list(map(names_to_snake_case, self.exist_tables))
+        self.HOST_KAFKA = host_kafka
+        self.PUBLIC_KEY_JWT = pulic_key_jwt
+        self.is_error = False
+
+    def get_instances_topics(self):
+        return self.topics_names
+    
+    def get_instances_table(self):
+        return self.tables_names
 
     def get_instances(self):
-        return self.topics_names
+        return 0
 
     def select_topic(self, topic):
+        total_topics = self.exist_topics+self.exist_tables
+        self.topic = topic
         select: list[Aux] = list(
-            filter(lambda x: names_to_snake_case(x) == topic, self.exist_topics))
+            filter(lambda x: names_to_snake_case(x) == topic,total_topics))
         if select.__len__() == 0 or select.__len__() > 1:
             self.is_error_handler = True
             return
@@ -70,10 +77,15 @@ class HandlerTopics():
             self.is_error_handler =False
             return
         try:
-            data = RequestFormat().FromString(event.message.value)
-            self.token = data.token
-            self.selected_topic.initi_data(
-                data.language, data.token, self.response_topic, event.message.value)
+            validate_table: list[Aux] = list(
+            filter(lambda x: names_to_snake_case(x) == self.topic,self.exist_tables))
+            if validate_table.__len__() == 1:
+                self.selected_topic.set_data(event.message.value)
+            else:
+                data = RequestFormat().FromString(event.message.value)
+                self.token = data.token
+                self.selected_topic.initi_data(
+                    data.language, data.token, self.response_topic, event.message.value)
         except:
             self.response_on_error(ResponseError(
                 res=400, msg="bad request").SerializeToString())
@@ -125,3 +137,6 @@ class HandlerTopics():
         except Exception as e:
             self.is_error_handler = True
             self.msg = str(e)
+
+    def __hash__(self):       
+        return hash(randrange(1000))
