@@ -49,13 +49,13 @@ class RequestData:
 class HandlerTopics():
     is_error_handler = False
     
-    def __init__(self, topic_list: list,table_list:list, HOST_KAFKA, PUBLIC_KEY_JWT):
+    def __init__(self, topic_list: list,table_list:list, host_kafka, pulic_key_jwt):
         self.exist_tables = list(map(lambda x: x(), table_list))
         self.exist_topics = list(map(lambda x: x(), topic_list))
         self.topics_names = list(map(names_to_snake_case, self.exist_topics))
         self.tables_names = list(map(names_to_snake_case, self.exist_tables))
-        self.HOST_KAFKA = HOST_KAFKA
-        self.PUBLIC_KEY_JWT = PUBLIC_KEY_JWT
+        self.HOST_KAFKA = host_kafka
+        self.PUBLIC_KEY_JWT = pulic_key_jwt
         self.is_error = False
 
     def get_instances_topics(self):
