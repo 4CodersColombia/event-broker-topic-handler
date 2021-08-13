@@ -10,14 +10,9 @@ from random import randrange
 
 class Aux:
     required_permissions = []
-
-    def initi_data(self):
-        pass
-
-    def send_response(self):
-        pass
-
-
+    set_data : function
+    initi_data:function
+    send_response: function
 
 def names_to_snake_case(data):
     return re.sub(r'(?<!^)(?=[A-Z])', '_', data.__class__.__name__).lower()
