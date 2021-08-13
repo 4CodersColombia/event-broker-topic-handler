@@ -17,8 +17,7 @@ class Aux:
     def send_response(self):
         pass
 
-    def set_data(self):
-        pass
+
 
 def names_to_snake_case(data):
     return re.sub(r'(?<!^)(?=[A-Z])', '_', data.__class__.__name__).lower()
