@@ -10,11 +10,11 @@ from random import randrange
 
 class Aux:
     required_permissions = []
-    def set_data():
+    def set_data(self):
         pass
-    def initi_data():
+    def initi_data(self):
         pass
-    def send_response():
+    def send_response(self):
         pass
     
 def names_to_snake_case(data):
