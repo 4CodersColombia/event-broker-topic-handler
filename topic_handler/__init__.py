@@ -11,11 +11,12 @@ from random import randrange
 class Aux:
     required_permissions = []
     def set_data(self):
-        pass
+        '''/* this is a /* nested comment */ */'''
+        
     def initi_data(self):
-        pass
+        '''/* this is a /* nested comment */ */'''
     def send_response(self):
-        pass
+        '''/* this is a /* nested comment */ */'''
     
 def names_to_snake_case(data):
     return re.sub(r'(?<!^)(?=[A-Z])', '_', data.__class__.__name__).lower()
