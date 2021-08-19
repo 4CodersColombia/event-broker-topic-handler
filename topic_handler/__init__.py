@@ -10,10 +10,14 @@ from random import randrange
 
 class Aux:
     required_permissions = []
-    set_data : function
-    initi_data:function
-    send_response: function
-
+    def set_data(self):
+        '''/* this is a /* nested comment */ */'''
+        
+    def initi_data(self):
+        '''/* this is a /* nested comment */ */'''
+    def send_response(self):
+        '''/* this is a /* nested comment */ */'''
+    
 def names_to_snake_case(data):
     return re.sub(r'(?<!^)(?=[A-Z])', '_', data.__class__.__name__).lower()
 
@@ -38,11 +42,21 @@ class RequestData:
     def __init__(self, auth_id, response_topic):
         self.auth_id = auth_id
         self.response_topic = response_topic
-
+class DecodeToken():
+    uid:str
+    aud:list[str]
+    iat:int
+    exp:int
+    role:str
+    
+    def  __init__(self,token_decode:dict):
+        for k, v in token_decode.items():
+            setattr(self, k, v)    
 
 class HandlerTopics():
     is_error_handler = False
-    
+    decode_token:DecodeToken
+
     def __init__(self, topic_list: list,table_list:list, host_kafka, pulic_key_jwt):
         self.exist_tables = list(map(lambda x: x(), table_list))
         self.exist_topics = list(map(lambda x: x(), topic_list))
@@ -92,13 +106,12 @@ class HandlerTopics():
             return
         if self.selected_topic.required_permissions:
             self.decode_jwt(self.selected_topic.required_permissions)
-
         if self.is_error_handler:
             self.response_on_error(ResponseError(
                 res=400, msg=self.msg).SerializeToString())
             self.is_error_handler =False
             return
-        self.selected_topic.send_response()
+        self.selected_topic.send_response(self.decode_token if self.selected_topic.required_permissions else {})
         self.is_error = False
         
 
@@ -127,7 +140,7 @@ class HandlerTopics():
                 algorithms=["RS256"],
                 options=options,
             )
-            self.auth_id = payload['uid']
+            self.decode_token =DecodeToken(payload)
         except jwt.ExpiredSignatureError:
             self.is_error_handler = True
             self.msg = "EXPIRED_TOKEN"
@@ -140,3 +153,4 @@ class HandlerTopics():
 
     def __hash__(self):       
         return hash(randrange(1000))
+    
