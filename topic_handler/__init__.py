@@ -57,7 +57,7 @@ class HandlerTopics():
     is_error_handler = False
     decode_token:DecodeToken
 
-    def __init__(self, topic_list: list,table_list:list, host_kafka, pulic_key_jwt):
+    def __init__(self, topic_list: list,table_list:list, host_kafka, pulic_key_jwt,with_pem=False):
         self.exist_tables = list(map(lambda x: x(), table_list))
         self.exist_topics = list(map(lambda x: x(), topic_list))
         self.topics_names = list(map(names_to_snake_case, self.exist_topics))
@@ -65,6 +65,7 @@ class HandlerTopics():
         self.HOST_KAFKA = host_kafka
         self.PUBLIC_KEY_JWT = pulic_key_jwt
         self.is_error = False
+        self.with_pem = with_pem
 
     def get_instances_topics(self):
         return self.topics_names
@@ -129,15 +130,18 @@ class HandlerTopics():
         producer.send(self.response_topic, response_model)
         producer.flush(timeout=10)
 
-    def decode_jwt(self, required_permissions):
-        pub_rsakey = load_pem_public_key(self.PUBLIC_KEY_JWT)
+    def decode_jwt(self,required_permissions):
+        if self.with_pem:
+            pub_rsakey = load_pem_public_key(self.PUBLIC_KEY_JWT)
+        else :
+            pub_rsakey = self.PUBLIC_KEY_JWT
         try:
             options = {"require": ["uid", "aud", "iat"]}
             payload = jwt.decode(
                 self.token,
                 pub_rsakey,
                 audience=required_permissions,
-                algorithms=["RS256"],
+                algorithms=["HS256"],
                 options=options,
             )
             self.decode_token =DecodeToken(payload)
