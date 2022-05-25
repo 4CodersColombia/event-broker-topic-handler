@@ -19,7 +19,7 @@ setup(
     install_requires=[
         'kafka-python==1.4.6',
         'betterproto==1.2.5',
-        'PyJWT==1.7.1',
+        'PyJWT==2.4.0',
         'cryptography==3.4.7',
     ],
 )
