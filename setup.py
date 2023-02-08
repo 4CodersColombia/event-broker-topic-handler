@@ -20,7 +20,7 @@ setup(
         'kafka-python==1.4.6',
         'betterproto==1.2.5',
         'PyJWT==1.7.1',
-        'cryptography==3.4.7',
+        'cryptography==39.0.1',
     ],
 )
 
